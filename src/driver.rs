@@ -40,6 +40,7 @@ pub fn run_with_rustc_args(mut rustc_args: Vec<String>) -> i32 {
         }
 
         // 分析模式：加必要 flag
+        // Ensure MIR is always available for downstream analysis callbacks.
         let always_encode_mir = "-Zalways_encode_mir";
         if !rustc_args.iter().any(|e| e == always_encode_mir) {
             rustc_args.push(always_encode_mir.to_owned());
