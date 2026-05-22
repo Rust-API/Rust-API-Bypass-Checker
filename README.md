@@ -3,6 +3,9 @@
 A conservative MIR-based checker for a small set of Rust safe/unsafe API counterparts.
 
 The current implementation focuses on proving local numerical and pointer-nullness preconditions for selected standard-library calls and reporting replacement opportunities such as `slice.get(i)` to `slice.get_unchecked(i)` when the safety condition is provably satisfied from local MIR facts.
+A focused MIR-based static analysis artifact for detecting locally provable Rust safe-to-unsafe API replacement opportunities.
+
+The checker reasons over local MIR facts such as integer intervals and pointer nullness to conservatively report cases where checked APIs, such as `slice.get(i)` or `split_at(mid)`, may be replaced by unchecked counterparts under provable preconditions.
 
 ## What This Demo Claims
 
@@ -91,6 +94,10 @@ git clone https://github.com/Rust-API/Rust-API-Bypass-Checker.git
 cd Rust-API-Bypass-Checker
 export RUSTFLAGS="-Clink-args=-fuse-ld=lld"
 cargo build
+$ git clone https://github.com/Rust-API/Rust-API-Bypass-Checker.git
+$ cd Rust-API-Bypass-Checker
+$ export RUSTFLAGS="-Clink-args=-fuse-ld=lld"
+$ cargo build
 ```
 
 This builds the main analyzer binary `api-bypass` together with the `cargo-api-bypass` wrapper.

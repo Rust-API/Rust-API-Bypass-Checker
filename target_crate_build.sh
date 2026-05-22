@@ -1,20 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# This file is to build the target crate for mir_wrapper to debug.
+# This file builds a target crate with mir_wrapper for debugging.
 
 set -euo pipefail
+
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
 usage() {
   cat <<'EOF'
 Usage:
-  cdto.sh [DIRECTORY]
+  target_crate_build.sh [DIRECTORY]
 
 Description:
-  Change into DIRECTORY. If DIRECTORY is omitted, change into $HOME.
+  Build DIRECTORY with this repository's mir_wrapper. If DIRECTORY is omitted,
+  build $HOME.
 
 Examples:
-  source ./cdto.sh /var/log
-  . ./cdto.sh ~/workspace
+  ./target_crate_build.sh /path/to/crate
+  MIR_WRAPPER_DUMP=/tmp/inv.json ./target_crate_build.sh ~/workspace
 EOF
 }
 
@@ -49,9 +52,9 @@ pwd
 # build the target crate
 rustup override set nightly-2025-01-10
 rm -rf target
-export RUSTC_WRAPPER="/home/yunlong/workspace/Bypassing/Rust-API-Bypass/target/debug/mir_wrapper"
-export MIR_WRAPPER_DUMP="/var/tmp/inv.json"
-export MIR_CHECKER_ARGS='["--show_all_entries"]'
+export RUSTC_WRAPPER="${RUSTC_WRAPPER:-$repo_root/target/debug/mir_wrapper}"
+export MIR_WRAPPER_DUMP="${MIR_WRAPPER_DUMP:-/var/tmp/inv.json}"
+export MIR_CHECKER_ARGS="${MIR_CHECKER_ARGS:-[\"--show_all_entries\"]}"
 
 # env | grep RUSTC
 
